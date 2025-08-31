@@ -1,0 +1,91 @@
+//? skill
+interface Skill {
+  name: string;
+  normalized?: string;
+  level: 'beginner' | 'intermediate' | 'professional' | 'expert';
+  years?: number;
+  lastUsed?: Date;
+  category?: string;
+  skillId?: string;
+}
+
+//? language
+interface Language {
+  title: string;
+  level: 'beginner' | 'intermediate' | 'professional' | 'native';
+}
+
+//? social media
+interface SocialMedia {
+  platform:
+    | 'instagram'
+    | 'linkedin'
+    | 'github'
+    | 'twitter'
+    | 'facebook'
+    | 'website';
+  url: string;
+  title?: string;
+}
+
+//? contact info
+interface ContactInfo {
+  phone?: string;
+  email?: string;
+  address?: string;
+  website?: string;
+}
+
+//? military service
+type MilitaryService =
+  | 'eligible' // مشمول
+  | 'exemptPermanent' // معاف دائم
+  | 'exemptTemporary' // معاف موقت
+  | 'completed' // انجام شده / اتمام خدمت
+  | 'inService' // در حال انجام
+  | 'absent' // غایب / فراری
+  | 'caregiver' // کفالت
+  | 'reserve'; // ذخیره
+
+export interface User {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  role: 'user' | 'admin';
+  firstName: string;
+  lastName: string;
+
+  bio?: string;
+  headLine?: string;
+  birthday?: Date;
+  contact?: ContactInfo;
+  languages?: Language[];
+  skills?: Skill[];
+  socialMedia?: SocialMedia[];
+  militaryService?: MilitaryService;
+
+  country?: string;
+  city?: string;
+  avatar?: string;
+  memoji?: string;
+  banner?: string;
+  logo?: string;
+
+  status: 'active' | 'suspended' | 'banned';
+  openToWork?: boolean;
+  isVerified: boolean;
+  marriage?: boolean;
+
+  counts?: {
+    projects?: number;
+    workExps?: number;
+    educations?: number;
+    achievements?: number;
+  };
+
+  pinnedProjectIds?: string[];
+
+  createdAt: Date;
+  updatedAt: Date;
+}
