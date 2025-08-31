@@ -9,6 +9,7 @@
     "lint": "eslint --fix"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.31.6",
     "@heroui/button": "2.2.24",
     "@heroui/code": "2.2.18",
     "@heroui/input": "2.4.25",

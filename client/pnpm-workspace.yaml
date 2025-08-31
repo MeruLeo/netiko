@@ -1,4 +1,5 @@
 ignoredBuiltDependencies:
+  - '@clerk/shared'
   - '@heroui/shared-utils'
   - '@tailwindcss/oxide'
   - sharp
