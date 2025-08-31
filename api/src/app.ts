@@ -6,6 +6,9 @@ import morgan from 'morgan';
 
 import config from './config/config';
 import { errorHandler } from './middlewares/errorHandler';
+import { clerkMiddleware } from '@clerk/express';
+
+import authRoutes from './routes/auth.routes';
 
 const app: Express = express();
 
@@ -30,9 +33,9 @@ if (!productionMode) {
   app.use(morgan('dev'));
 }
 
-app.get('/', (req, res) => {
-  res.json({ msg: 'wlc to NETIKO' });
-});
+app.use(clerkMiddleware());
+
+app.use('/v1/auth', authRoutes);
 
 app.use(errorHandler);
 

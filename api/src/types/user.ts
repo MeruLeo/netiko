@@ -1,5 +1,5 @@
 //? skill
-interface Skill {
+export interface Skill {
   name: string;
   normalized?: string;
   level: 'beginner' | 'intermediate' | 'professional' | 'expert';
@@ -10,13 +10,13 @@ interface Skill {
 }
 
 //? language
-interface Language {
+export interface Language {
   title: string;
   level: 'beginner' | 'intermediate' | 'professional' | 'native';
 }
 
 //? social media
-interface SocialMedia {
+export interface SocialMedia {
   platform:
     | 'instagram'
     | 'linkedin'
@@ -29,7 +29,7 @@ interface SocialMedia {
 }
 
 //? contact info
-interface ContactInfo {
+export interface ContactInfo {
   phone?: string;
   email?: string;
   address?: string;
@@ -37,7 +37,7 @@ interface ContactInfo {
 }
 
 //? military service
-type MilitaryService =
+export type MilitaryService =
   | 'eligible' // مشمول
   | 'exemptPermanent' // معاف دائم
   | 'exemptTemporary' // معاف موقت
@@ -47,8 +47,8 @@ type MilitaryService =
   | 'caregiver' // کفالت
   | 'reserve'; // ذخیره
 
-export interface User {
-  _id: string;
+export interface IUser {
+  clerkId: string;
   username: string;
   email: string;
   password: string;

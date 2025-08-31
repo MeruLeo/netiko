@@ -10,6 +10,10 @@ interface Config {
     local: string;
     product: string;
   };
+  clerk: {
+    publishKey: string;
+    secretKey: string;
+  };
 }
 
 const config: Config = {
@@ -19,6 +23,10 @@ const config: Config = {
   origions: {
     local: 'http://localhost:3000',
     product: 'https://google.com',
+  },
+  clerk: {
+    publishKey: process.env.CLERK_PUBLISHABLE_KEY!,
+    secretKey: process.env.CLERK_SECRET_KEY!,
   },
 };
 
