@@ -9,6 +9,7 @@
     "lint": "eslint --fix"
   },
   "dependencies": {
+    "@clerk/localizations": "^3.24.0",
     "@clerk/nextjs": "^6.31.6",
     "@heroui/button": "2.2.24",
     "@heroui/code": "2.2.18",
@@ -23,6 +24,7 @@
     "@heroui/theme": "2.4.20",
     "@react-aria/ssr": "3.9.10",
     "@react-aria/visually-hidden": "3.8.26",
+    "axios": "^1.11.0",
     "clsx": "2.1.1",
     "dotenv": "^17.2.1",
     "framer-motion": "11.18.2",

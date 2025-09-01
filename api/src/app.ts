@@ -9,6 +9,7 @@ import { errorHandler } from './middlewares/errorHandler';
 import { clerkMiddleware } from '@clerk/express';
 
 import authRoutes from './routes/auth.routes';
+import profileRoutes from './routes/profile.routes';
 
 const app: Express = express();
 
@@ -36,6 +37,7 @@ if (!productionMode) {
 app.use(clerkMiddleware());
 
 app.use('/v1/auth', authRoutes);
+app.use('/v1/profile', profileRoutes);
 
 app.use(errorHandler);
 
