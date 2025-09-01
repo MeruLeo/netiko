@@ -1,6 +1,7 @@
-export interface Project {
-  _id: string;
-  userId: string;
+import { Types } from 'mongoose';
+
+export interface IProject {
+  creator: Types.ObjectId;
   name: string;
   slug?: string;
   description?: string;
@@ -11,7 +12,6 @@ export interface Project {
   endDate?: Date | null;
   images?: string[];
   coverImage?: string;
-  collaborators?: string[];
   status?: 'active' | 'archived';
   tags?: string[];
   isPinned?: boolean;
