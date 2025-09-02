@@ -220,5 +220,78 @@ export const updateProject = async (req: Request, res: Response) => {
     return res.status(500).json({ ok: false, error: 'Internal server error' });
   }
 };
-
 //? end of the update
+
+//? uploads
+export const uploadCoverImage = async (req: Request, res: Response) => {
+  try {
+    const { userId } = getAuth(req);
+    if (!userId)
+      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+
+    const { projectId } = req.params;
+    if (!req.file)
+      return res.status(400).json({ ok: false, error: 'No file uploaded' });
+
+    const user = await UserModel.findOne({ clerkId: userId });
+    if (!user)
+      return res.status(404).json({ ok: false, error: 'User not found' });
+
+    const updatedProject = await ProjectModel.findOneAndUpdate(
+      { _id: projectId, creator: user._id },
+      {
+        $set: {
+          coverImage: `/imgs/projects/${req.file.filename}`,
+          updatedAt: new Date(),
+        },
+      },
+      { new: true },
+    );
+
+    if (!updatedProject)
+      return res.status(404).json({ ok: false, error: 'Project not found' });
+
+    return res.json({ ok: true, project: updatedProject });
+  } catch (err) {
+    console.error('uploadCoverImage error:', err);
+    return res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
+
+export const uploadImages = async (req: Request, res: Response) => {
+  try {
+    const { userId } = getAuth(req);
+    if (!userId)
+      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+
+    const { projectId } = req.params;
+    if (!req.files || !(req.files as Express.Multer.File[]).length)
+      return res.status(400).json({ ok: false, error: 'No files uploaded' });
+
+    const user = await UserModel.findOne({ clerkId: userId });
+    if (!user)
+      return res.status(404).json({ ok: false, error: 'User not found' });
+
+    const filePaths = (req.files as Express.Multer.File[]).map(
+      (f) => `/imgs/projects/${f.filename}`,
+    );
+
+    const updatedProject = await ProjectModel.findOneAndUpdate(
+      { _id: projectId, creator: user._id },
+      {
+        $addToSet: { images: { $each: filePaths } },
+        $set: { updatedAt: new Date() },
+      },
+      { new: true },
+    );
+
+    if (!updatedProject)
+      return res.status(404).json({ ok: false, error: 'Project not found' });
+
+    return res.json({ ok: true, project: updatedProject });
+  } catch (err) {
+    console.error('uploadImages error:', err);
+    return res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
+//? end of uploads

@@ -11,12 +11,14 @@ import { clerkMiddleware } from '@clerk/express';
 import authRoutes from './routes/auth.routes';
 import profileRoutes from './routes/profile.routes';
 import projectRoutes from './routes/project.routes';
+import path from 'path';
 
 const app: Express = express();
 
 const productionMode = config.nodeEnv === 'production';
 
 app.use(express.json({ limit: '50kb' }));
+app.use('/imgs/projects', express.static(path.join(__dirname, '../uploads')));
 
 app.use(
   cors({
