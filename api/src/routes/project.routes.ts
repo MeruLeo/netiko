@@ -1,16 +1,49 @@
 import { Router } from 'express';
 import {
   create,
+  deleteProject,
+  getProjects,
+  getUserProjects,
   updateProject,
   uploadCoverImage,
   uploadImages,
 } from '../controllers/project.controller';
 import { upload } from '../utils/multer';
+// import { requireAuth } from '../middlewares/requireAuth';
+import { checkOwnership } from '../middlewares/checkOwnership';
+import { ProjectModel } from '../models/Project';
+import { requireAuth } from '@clerk/express';
 
 const router = Router();
 
+router.get('/', getProjects);
+router.get('/user', getUserProjects);
+
 router.post('/', create);
-router.put('/:projectId', updateProject);
-router.put('/:projectId/cover', upload.single('coverImage'), uploadCoverImage);
-router.put('/:projectId/images', upload.array('images', 10), uploadImages);
+router.delete(
+  '/:id',
+  requireAuth(),
+  checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
+  deleteProject,
+);
+router.put(
+  '/:id',
+  requireAuth(),
+  checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
+  updateProject,
+);
+router.put(
+  '/:id/cover',
+  upload.single('coverImage'),
+  requireAuth(),
+  checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
+  uploadCoverImage,
+);
+router.put(
+  '/:projectId/images',
+  upload.array('images', 10),
+  requireAuth(),
+  checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
+  uploadImages,
+);
 export default router;

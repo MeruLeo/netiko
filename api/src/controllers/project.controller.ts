@@ -3,6 +3,135 @@ import { getAuth } from '@clerk/express';
 import { ProjectModel } from '../models/Project';
 import { projectValidator } from '../validators/project';
 import { UserModel } from '../models/User';
+import mongoose from 'mongoose';
+
+//? getting proejcts
+export const getProjects = async (req: Request, res: Response) => {
+  try {
+    const {
+      creator, // فیلتر بر اساس سازنده
+      status, // وضعیت پروژه (مثلا: ongoing, completed)
+      isPinned, // true / false
+      slug, // اسلاگ دقیق
+      tag, // بر اساس یک تگ خاص
+      tech, // بر اساس تکنولوژی خاص
+      search, // جستجو در name یا description
+      sort = '-createdAt', // مرتب‌سازی، پیش‌فرض جدیدترین‌ها
+      page = '1',
+      limit = '10',
+    } = req.query;
+
+    const filter: any = {};
+
+    if (creator && mongoose.Types.ObjectId.isValid(creator as string)) {
+      filter.creator = new mongoose.Types.ObjectId(creator as string);
+    }
+    if (status) {
+      filter.status = status;
+    }
+    if (typeof isPinned !== 'undefined') {
+      filter.isPinned = isPinned === 'true';
+    }
+    if (slug) {
+      filter.slug = slug;
+    }
+    if (tag) {
+      filter.tags = tag;
+    }
+    if (tech) {
+      filter.techs = tech;
+    }
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search as string, $options: 'i' } },
+        { description: { $regex: search as string, $options: 'i' } },
+      ];
+    }
+
+    const pageNum = parseInt(page as string, 10);
+    const limitNum = parseInt(limit as string, 10);
+    const skip = (pageNum - 1) * limitNum;
+
+    const projects = await ProjectModel.find(filter)
+      .populate('creator', 'username firstName lastName memoji avatar')
+      .sort(sort as string)
+      .skip(skip)
+      .limit(limitNum);
+
+    const total = await ProjectModel.countDocuments(filter);
+
+    return res.json({
+      ok: true,
+      total,
+      page: pageNum,
+      limit: limitNum,
+      projects,
+    });
+  } catch (err) {
+    console.error('getProjects error:', err);
+    return res.status(500).json({
+      ok: false,
+      error: 'Internal server error',
+    });
+  }
+};
+
+export const getUserProjects = async (req: Request, res: Response) => {
+  try {
+    const {
+      owner,
+      status,
+      tag,
+      tech,
+      search,
+      page = '1',
+      limit = '10',
+      sort = '-createdAt',
+    } = req.query;
+
+    const query: any = {};
+
+    if (owner) query.creator = owner;
+    if (status) query.status = status;
+    if (tag) query.tags = tag;
+    if (tech) query.techs = tech;
+
+    if (search) {
+      query.$or = [
+        { name: { $regex: search as string, $options: 'i' } },
+        { description: { $regex: search as string, $options: 'i' } },
+      ];
+    }
+
+    const pageNum = parseInt(page as string, 10) || 1;
+    const limitNum = parseInt(limit as string, 10) || 10;
+    const skip = (pageNum - 1) * limitNum;
+
+    const [projects, total] = await Promise.all([
+      ProjectModel.find(query)
+        .sort(sort as string)
+        .skip(skip)
+        .limit(limitNum),
+      ProjectModel.countDocuments(query),
+    ]);
+
+    return res.json({
+      ok: true,
+      page: pageNum,
+      limit: limitNum,
+      total,
+      totalPages: Math.ceil(total / limitNum),
+      projects,
+    });
+  } catch (err) {
+    console.error('getProjects error:', err);
+    return res.status(500).json({
+      ok: false,
+      error: 'Internal server error',
+    });
+  }
+};
+//? end of getting proejcts
 
 export const create = async (req: Request, res: Response) => {
   try {
@@ -89,11 +218,9 @@ function setNested(obj: any, path: string, value: any) {
 
 export const updateProject = async (req: Request, res: Response) => {
   try {
-    const { userId } = getAuth(req);
-    if (!userId)
-      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+    const userId = (req as any).auth().userId;
 
-    const { projectId } = req.params;
+    const { id } = req.params;
     const { field, value, updates, op } = req.body;
 
     if (!field && !updates) {
@@ -198,16 +325,17 @@ export const updateProject = async (req: Request, res: Response) => {
       updatedAt: new Date(),
     };
 
-    // پیدا کردن یوزر واقعی (چون userId از Clerk هست)
     const user = await UserModel.findOne({ clerkId: userId });
     if (!user) {
       return res.status(404).json({ ok: false, error: 'User not found' });
     }
 
     const updatedProject = await ProjectModel.findOneAndUpdate(
-      { _id: projectId, creator: user._id },
+      new mongoose.Types.ObjectId(id),
       updateQuery,
-      { new: true },
+      {
+        new: true,
+      },
     );
 
     if (!updatedProject) {
@@ -225,11 +353,9 @@ export const updateProject = async (req: Request, res: Response) => {
 //? uploads
 export const uploadCoverImage = async (req: Request, res: Response) => {
   try {
-    const { userId } = getAuth(req);
-    if (!userId)
-      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+    const userId = (req as any).auth().userId;
 
-    const { projectId } = req.params;
+    const { id } = req.params;
     if (!req.file)
       return res.status(400).json({ ok: false, error: 'No file uploaded' });
 
@@ -238,7 +364,7 @@ export const uploadCoverImage = async (req: Request, res: Response) => {
       return res.status(404).json({ ok: false, error: 'User not found' });
 
     const updatedProject = await ProjectModel.findOneAndUpdate(
-      { _id: projectId, creator: user._id },
+      new mongoose.Types.ObjectId(id),
       {
         $set: {
           coverImage: `/imgs/projects/${req.file.filename}`,
@@ -260,11 +386,9 @@ export const uploadCoverImage = async (req: Request, res: Response) => {
 
 export const uploadImages = async (req: Request, res: Response) => {
   try {
-    const { userId } = getAuth(req);
-    if (!userId)
-      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+    const userId = (req as any).auth().userId;
 
-    const { projectId } = req.params;
+    const { id } = req.params;
     if (!req.files || !(req.files as Express.Multer.File[]).length)
       return res.status(400).json({ ok: false, error: 'No files uploaded' });
 
@@ -277,7 +401,7 @@ export const uploadImages = async (req: Request, res: Response) => {
     );
 
     const updatedProject = await ProjectModel.findOneAndUpdate(
-      { _id: projectId, creator: user._id },
+      new mongoose.Types.ObjectId(id),
       {
         $addToSet: { images: { $each: filePaths } },
         $set: { updatedAt: new Date() },
@@ -295,3 +419,25 @@ export const uploadImages = async (req: Request, res: Response) => {
   }
 };
 //? end of uploads
+
+export const deleteProject = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).auth().userId;
+    const user = await UserModel.findOne({ clerkId: userId });
+    if (!user)
+      return res.status(404).json({ ok: false, error: 'User not found' });
+
+    const { id } = req.params;
+    const project = await ProjectModel.findById(id);
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    await ProjectModel.findByIdAndDelete(id);
+
+    return res.json({ ok: true, message: 'Project deleted successfuly' });
+  } catch (err) {
+    console.error('deleting project error:', err);
+    return res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
