@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
+import path from 'path';
 
 import config from './config/config';
 import { errorHandler } from './middlewares/errorHandler';
@@ -11,7 +12,7 @@ import { clerkMiddleware } from '@clerk/express';
 import authRoutes from './routes/auth.routes';
 import profileRoutes from './routes/profile.routes';
 import projectRoutes from './routes/project.routes';
-import path from 'path';
+import workExpRoutes from './routes/workExp.routes';
 
 const app: Express = express();
 
@@ -42,6 +43,7 @@ app.use(clerkMiddleware());
 app.use('/v1/auth', authRoutes);
 app.use('/v1/profile', profileRoutes);
 app.use('/v1/projects', projectRoutes);
+app.use('/v1/work-exp', workExpRoutes);
 
 app.use(errorHandler);
 

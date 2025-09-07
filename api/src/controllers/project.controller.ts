@@ -75,70 +75,11 @@ export const getProjects = async (req: Request, res: Response) => {
     });
   }
 };
-
-export const getUserProjects = async (req: Request, res: Response) => {
-  try {
-    const {
-      owner,
-      status,
-      tag,
-      tech,
-      search,
-      page = '1',
-      limit = '10',
-      sort = '-createdAt',
-    } = req.query;
-
-    const query: any = {};
-
-    if (owner) query.creator = owner;
-    if (status) query.status = status;
-    if (tag) query.tags = tag;
-    if (tech) query.techs = tech;
-
-    if (search) {
-      query.$or = [
-        { name: { $regex: search as string, $options: 'i' } },
-        { description: { $regex: search as string, $options: 'i' } },
-      ];
-    }
-
-    const pageNum = parseInt(page as string, 10) || 1;
-    const limitNum = parseInt(limit as string, 10) || 10;
-    const skip = (pageNum - 1) * limitNum;
-
-    const [projects, total] = await Promise.all([
-      ProjectModel.find(query)
-        .sort(sort as string)
-        .skip(skip)
-        .limit(limitNum),
-      ProjectModel.countDocuments(query),
-    ]);
-
-    return res.json({
-      ok: true,
-      page: pageNum,
-      limit: limitNum,
-      total,
-      totalPages: Math.ceil(total / limitNum),
-      projects,
-    });
-  } catch (err) {
-    console.error('getProjects error:', err);
-    return res.status(500).json({
-      ok: false,
-      error: 'Internal server error',
-    });
-  }
-};
 //? end of getting proejcts
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const { userId } = getAuth(req);
-    if (!userId) {
-      return res.status(401).json({ ok: false, error: 'Unauthorized' });
-    }
+    const userId = (req as any).auth().userId;
 
     const user = await UserModel.findOne({ clerkId: userId });
     if (!user) {

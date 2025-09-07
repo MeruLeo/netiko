@@ -1,6 +1,7 @@
-export interface WorkExp {
-  _id: string;
-  userId: string;
+import { Types } from 'mongoose';
+
+export interface IWorkExp {
+  creator: Types.ObjectId;
   jobTitle: string;
   company: string;
   location?: string;

@@ -3,13 +3,11 @@ import {
   create,
   deleteProject,
   getProjects,
-  getUserProjects,
   updateProject,
   uploadCoverImage,
   uploadImages,
 } from '../controllers/project.controller';
 import { upload } from '../utils/multer';
-// import { requireAuth } from '../middlewares/requireAuth';
 import { checkOwnership } from '../middlewares/checkOwnership';
 import { ProjectModel } from '../models/Project';
 import { requireAuth } from '@clerk/express';
@@ -17,7 +15,6 @@ import { requireAuth } from '@clerk/express';
 const router = Router();
 
 router.get('/', getProjects);
-router.get('/user', getUserProjects);
 
 router.post('/', create);
 router.delete(
