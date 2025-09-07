@@ -14,6 +14,7 @@ import profileRoutes from './routes/profile.routes';
 import projectRoutes from './routes/project.routes';
 import workExpRoutes from './routes/workExp.routes';
 import eductionRoutes from './routes/eduction.routes';
+import achievementRoutes from './routes/achievement.routes';
 
 const app: Express = express();
 
@@ -46,6 +47,7 @@ app.use('/v1/profile', profileRoutes);
 app.use('/v1/projects', projectRoutes);
 app.use('/v1/work-exp', workExpRoutes);
 app.use('/v1/eduction', eductionRoutes);
+app.use('/v1/achievement', achievementRoutes);
 
 app.use(errorHandler);
 
