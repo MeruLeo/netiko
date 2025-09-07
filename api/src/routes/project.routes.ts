@@ -11,6 +11,7 @@ import { upload } from '../utils/multer';
 import { checkOwnership } from '../middlewares/checkOwnership';
 import { ProjectModel } from '../models/Project';
 import { requireAuth } from '@clerk/express';
+import { uploadTo } from '../middlewares/uploadTo';
 
 const router = Router();
 
@@ -26,13 +27,13 @@ router.delete(
 router.patch('/:id', requireAuth(), updateProject);
 router.put(
   '/:id/cover',
-  upload.single('coverImage'),
+  uploadTo('projects').single('coverImage'),
   requireAuth(),
   uploadCoverImage,
 );
 router.put(
   '/:projectId/images',
-  upload.array('images', 10),
+  uploadTo('projects').array('images', 10),
   requireAuth(),
   uploadImages,
 );

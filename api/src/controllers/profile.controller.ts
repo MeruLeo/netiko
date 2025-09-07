@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { getAuth } from '@clerk/express';
 import { UserModel } from '../models/User';
 
 const FIELD_MAP: Record<string, string> = {
@@ -39,9 +38,7 @@ function setNested(obj: any, path: string, value: any) {
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const { userId } = getAuth(req);
-    if (!userId)
-      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+    const userId = (req as any).auth().userId;
 
     const { field, value, updates } = req.body;
 
@@ -104,5 +101,103 @@ export const updateProfile = async (req: Request, res: Response) => {
   } catch (err) {
     console.error('updateProfileField error:', err);
     return res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
+
+export const uploadAvatar = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).auth().userId;
+    if (!req.file) {
+      return res.status(400).json({ ok: false, error: 'No file uploaded' });
+    }
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { clerkId: userId },
+      { $set: { avatar: `/imgs/avatars/${req.file.filename}` } },
+      { new: true },
+    );
+
+    return res.json({ ok: true, avatar: updatedUser?.avatar });
+  } catch (err) {
+    console.error('uploadAvatar error:', err);
+    res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
+
+// حذف آواتار
+export const deleteAvatar = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).auth().userId;
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { clerkId: userId },
+      { $unset: { avatar: '' } },
+      { new: true },
+    );
+
+    return res.json({ ok: true, message: 'Avatar removed' });
+  } catch (err) {
+    console.error('deleteAvatar error:', err);
+    res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
+
+// انتخاب memoji
+export const setMemoji = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).auth().userId;
+    const { memoji } = req.body;
+
+    if (!memoji)
+      return res.status(400).json({ ok: false, error: 'Memoji required' });
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { clerkId: userId },
+      { $set: { memoji } },
+      { new: true },
+    );
+
+    return res.json({ ok: true, memoji: updatedUser?.memoji });
+  } catch (err) {
+    console.error('setMemoji error:', err);
+    res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
+
+// اضافه کردن skill
+export const addSkill = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).auth().userId;
+    const skill = req.body;
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { clerkId: userId },
+      { $push: { skills: skill } },
+      { new: true },
+    );
+
+    return res.json({ ok: true, skills: updatedUser?.skills });
+  } catch (err) {
+    console.error('addSkill error:', err);
+    res.status(500).json({ ok: false, error: 'Internal server error' });
+  }
+};
+
+// حذف skill
+export const removeSkill = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).auth().userId;
+    const { skillId } = req.params;
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { clerkId: userId },
+      { $pull: { skills: { skillId } } },
+      { new: true },
+    );
+
+    return res.json({ ok: true, skills: updatedUser?.skills });
+  } catch (err) {
+    console.error('removeSkill error:', err);
+    res.status(500).json({ ok: false, error: 'Internal server error' });
   }
 };
