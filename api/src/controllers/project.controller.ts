@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { getAuth } from '@clerk/express';
 import { ProjectModel } from '../models/Project';
 import { projectValidator } from '../validators/project';
 import { UserModel } from '../models/User';
