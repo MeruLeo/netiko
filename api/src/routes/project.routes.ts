@@ -23,24 +23,17 @@ router.delete(
   checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
   deleteProject,
 );
-router.put(
-  '/:id',
-  requireAuth(),
-  checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
-  updateProject,
-);
+router.patch('/:id', requireAuth(), updateProject);
 router.put(
   '/:id/cover',
   upload.single('coverImage'),
   requireAuth(),
-  checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
   uploadCoverImage,
 );
 router.put(
   '/:projectId/images',
   upload.array('images', 10),
   requireAuth(),
-  checkOwnership({ model: ProjectModel, ownerField: 'creator' }),
   uploadImages,
 );
 export default router;

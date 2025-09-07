@@ -12,19 +12,14 @@ import { WorkExpModel } from '../models/WorkExp';
 
 const router = Router();
 
-// GET /work-exps?creator=:id&company=...&page=...
 router.get('/', getWorkExps);
 
-// GET /work-exps/:id
 router.get('/:id', getWorkExpById);
 
-// POST /work-exps
 router.post('/', requireAuth(), createWorkExp);
 
-// PUT /work-exps/:id
-router.put('/:id', requireAuth(), updateWorkExp);
+router.patch('/:id', requireAuth(), updateWorkExp);
 
-// DELETE /work-exps/:id
 router.delete(
   '/:id',
   requireAuth(),
