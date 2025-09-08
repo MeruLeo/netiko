@@ -9,7 +9,8 @@ import { siteConfig } from "@/config/site";
 import { Navbar } from "@/components/navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { arSA, faIR } from "@clerk/localizations";
-import { fontSans } from "@/config/fonts";
+import { sfBold, sfLight, sfMed, sfProBold } from "@/config/fonts";
+import GradualBlurMemo from "@/components/gradualBlur";
 
 export const metadata: Metadata = {
   title: {
@@ -34,16 +35,17 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const localization = {};
-
   return (
     <ClerkProvider localization={faIR}>
-      <html suppressHydrationWarning lang="fa" dir="rtl">
+      <html lang="fa" dir="rtl">
         <head />
         <body
           className={clsx(
-            "min-h-screen text-foreground bg-background font-sans antialiased",
-            fontSans.variable
+            sfLight.variable,
+            sfMed.variable,
+            sfBold.variable,
+            sfProBold.variable,
+            "min-h-screen font-sf-med text-foreground bg-background antialiased"
           )}
         >
           <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
@@ -52,18 +54,17 @@ export default function RootLayout({
               <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
                 {children}
               </main>
-              <footer className="w-full flex items-center justify-center py-3">
-                <Link
-                  isExternal
-                  className="flex items-center gap-1 text-current"
-                  href="https://heroui.com?utm_source=next-app-template"
-                  title="heroui.com homepage"
-                >
-                  <span className="text-default-600">Powered by</span>
-                  <p className="text-primary">HeroUI</p>
-                </Link>
-              </footer>
             </div>
+            <GradualBlurMemo
+              target="page"
+              position="bottom"
+              height="6rem"
+              strength={2}
+              divCount={5}
+              curve="bezier"
+              exponential={true}
+              opacity={1}
+            />
           </Providers>
         </body>
       </html>

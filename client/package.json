@@ -11,7 +11,9 @@
   "dependencies": {
     "@clerk/localizations": "^3.24.0",
     "@clerk/nextjs": "^6.31.6",
+    "@heroui/avatar": "^2.2.21",
     "@heroui/button": "2.2.24",
+    "@heroui/chip": "^2.2.21",
     "@heroui/code": "2.2.18",
     "@heroui/input": "2.4.25",
     "@heroui/kbd": "2.2.19",
@@ -29,6 +31,8 @@
     "dotenv": "^17.2.1",
     "framer-motion": "11.18.2",
     "intl-messageformat": "10.7.16",
+    "lucide-react": "^0.542.0",
+    "mathjs": "^14.7.0",
     "next": "15.5.2",
     "next-themes": "0.4.6",
     "react": "18.3.1",

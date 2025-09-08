@@ -1,6 +1,10 @@
 "use client";
 
+import { MainProfileHeader } from "@/components/main/header";
+import { MainProfileMain } from "@/components/main/main";
+import { sfBold } from "@/config/fonts";
 import { useUser } from "@clerk/nextjs";
+import { Divide } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -23,15 +27,15 @@ export default function Home() {
   if (!localUser) return <div>در حال بارگذاری...</div>;
 
   return (
-    <div>
-      <h1>
-        سلام، {localUser.firstName} {localUser.lastName}
-      </h1>
-      <p>ایمیل: {localUser.email}</p>
-      <p>یوزرنیم: {localUser.username}</p>
-      <p>{localUser.bio}</p>
-      <p>نقش: {localUser.role ?? "ثبت نشده"}</p>
-      <p>شماره تماس: {localUser.phone ?? "ثبت نشده"}</p>
-    </div>
+    <section className=" flex flex-col justify-center items-center gap-4">
+      <MainProfileHeader
+        firstName={localUser.firstName}
+        lastName={localUser.lastName}
+        headLine={localUser.headLine}
+        openToWork={localUser.openToWork}
+        username={localUser.username}
+      />
+      <MainProfileMain avatar={localUser.avatar} />
+    </section>
   );
 }

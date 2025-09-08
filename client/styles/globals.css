@@ -1,3 +1,35 @@
 @import "tailwindcss";
 
-@config "../tailwind.config.js"
+@config "../tailwind.config.js";
+
+:root {
+  --color-blue: #007aff;
+  --color-green: #34c759;
+  --color-indigo: #5856d6;
+  --color-orange: #ff9500;
+  --color-pink: #ff2d55;
+  --color-red: #ff3b30;
+  --color-teal: #30b0c7;
+  --color-yellow: #ffcc00;
+  --color-gray: #8e8e93;
+  --color-gray2: #aeaeb2;
+  --color-gray3: #c7c7cc;
+  --color-gray4: #f2f2f7;
+  --color-link: #007aff;
+}
+
+.dark {
+  --color-blue: #0a84ff;
+  --color-green: #30d158;
+  --color-indigo: #5e5ce6;
+  --color-orange: #ff9f0a;
+  --color-pink: #ff375f;
+  --color-red: #ff453a;
+  --color-teal: #40c8e0;
+  --color-yellow: #ffd60a;
+  --color-gray: #8e8e93;
+  --color-gray2: #636366;
+  --color-gray3: #48484a;
+  --color-gray4: #1c1c1e;
+  --color-link: #0b84ff;
+}
