@@ -124,7 +124,6 @@ export const uploadAvatar = async (req: Request, res: Response) => {
   }
 };
 
-// حذف آواتار
 export const deleteAvatar = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).auth().userId;
@@ -142,7 +141,6 @@ export const deleteAvatar = async (req: Request, res: Response) => {
   }
 };
 
-// انتخاب memoji
 export const setMemoji = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).auth().userId;
@@ -164,7 +162,6 @@ export const setMemoji = async (req: Request, res: Response) => {
   }
 };
 
-// اضافه کردن skill
 export const addSkill = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).auth().userId;
@@ -183,7 +180,6 @@ export const addSkill = async (req: Request, res: Response) => {
   }
 };
 
-// حذف skill
 export const removeSkill = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).auth().userId;
