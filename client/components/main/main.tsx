@@ -4,6 +4,7 @@ import { SearchIcon } from "../icons";
 import { ArrowLeft, ArrowUpIcon } from "lucide-react";
 import { Button } from "@heroui/button";
 import Link from "next/link";
+import { AddSection } from "./sections/add";
 
 interface MainProfileMainProps {
   avatar?: string;
@@ -31,16 +32,8 @@ export const MainProfileMain = ({ memoji, avatar }: MainProfileMainProps) => {
           />
         )}
       </section>
-      <section className="sm:w-[30rem]">
-        <Button
-          as={`button`}
-          endContent={<ArrowLeft />}
-          className="bg-blue"
-          href={`#`}
-          fullWidth
-        >
-          شروع همکاری
-        </Button>
+      <section className="">
+        <AddSection />
       </section>
     </main>
   );

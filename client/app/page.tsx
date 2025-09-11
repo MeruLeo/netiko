@@ -27,7 +27,7 @@ export default function Home() {
   if (!localUser) return <div>در حال بارگذاری...</div>;
 
   return (
-    <section className=" flex flex-col justify-center items-center gap-4">
+    <section className="mb-[7rem] flex flex-col justify-center items-center gap-4">
       <MainProfileHeader
         firstName={localUser.firstName}
         lastName={localUser.lastName}

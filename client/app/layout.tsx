@@ -45,7 +45,7 @@ export default function RootLayout({
             sfMed.variable,
             sfBold.variable,
             sfProBold.variable,
-            "min-h-screen font-sf-med text-foreground bg-background antialiased"
+            "relative z-0 min-h-screen font-sf-med text-foreground bg-background antialiased"
           )}
         >
           <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
@@ -55,6 +55,16 @@ export default function RootLayout({
                 {children}
               </main>
             </div>
+
+            <h2
+              className="fixed inset-0 flex justify-center items-center 
+  font-sf-bold 
+  text-[15vw] 
+  text-gray4 pointer-events-none select-none z-[-1]"
+            >
+              NETIKO
+            </h2>
+
             <GradualBlurMemo
               target="page"
               position="bottom"
