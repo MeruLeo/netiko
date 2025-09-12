@@ -37,7 +37,12 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider localization={faIR}>
-      <html lang="fa" dir="rtl">
+      <html
+        lang="fa"
+        dir="rtl"
+        className="dark"
+        style={{ colorScheme: "dark" }}
+      >
         <head />
         <body
           className={clsx(
@@ -56,14 +61,14 @@ export default function RootLayout({
               </main>
             </div>
 
-            <h2
+            {/* <h2
               className="fixed inset-0 flex justify-center items-center 
   font-sf-bold 
   text-[15vw] 
   text-gray4 pointer-events-none select-none z-[-1]"
             >
               NETIKO
-            </h2>
+            </h2> */}
 
             <GradualBlurMemo
               target="page"

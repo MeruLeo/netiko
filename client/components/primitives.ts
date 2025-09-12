@@ -4,6 +4,7 @@ export const title = tv({
   base: "tracking-tight inline font-semibold",
   variants: {
     color: {
+      netiko: "from-[#30d158] via-[#ff9f0a] to-[#ff375f]",
       violet: "from-[#FF1CF7] to-[#b249f8]",
       yellow: "from-[#FF705B] to-[#FFB457]",
       blue: "from-[#5EA2EF] to-[#0072F5]",
@@ -27,6 +28,7 @@ export const title = tv({
   compoundVariants: [
     {
       color: [
+        "netiko",
         "violet",
         "yellow",
         "blue",
@@ -35,7 +37,7 @@ export const title = tv({
         "pink",
         "foreground",
       ],
-      class: "bg-clip-text text-transparent bg-gradient-to-b",
+      class: "bg-clip-text text-transparent bg-gradient-to-r",
     },
   ],
 });
