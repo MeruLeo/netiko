@@ -21,10 +21,8 @@ export default function AuthPage() {
           <p>ارتباط برقرار کنید، به نمایش بذارید، رشد کنید</p>
         </div>
         <div className="flex gap-2 round flex-col mt-4">
-          <Button className="bg-blue" as={"a"}>
-            داستان خود را شروع کنید
-          </Button>
-          <Button className="bg-gray3" as={"a"}>
+          <Button className="bg-blue">داستان خود را شروع کنید</Button>
+          <Button className="bg-gray3" as={"a"} href="/auth/login">
             وارد شوید
           </Button>
         </div>

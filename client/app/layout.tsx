@@ -11,6 +11,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { arSA, faIR } from "@clerk/localizations";
 import { sfBold, sfLight, sfMed, sfProBold } from "@/config/fonts";
 import GradualBlurMemo from "@/components/gradualBlur";
+import Loading from "@/components/loading";
 
 export const metadata: Metadata = {
   title: {
@@ -36,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider localization={faIR}>
+    <ClerkProvider localization={faIR} appearance={{ cssLayerName: "clerk" }}>
       <html
         lang="fa"
         dir="rtl"
@@ -80,6 +81,7 @@ export default function RootLayout({
               exponential={true}
               opacity={1}
             />
+            <Loading />
           </Providers>
         </body>
       </html>

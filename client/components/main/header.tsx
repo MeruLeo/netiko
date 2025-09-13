@@ -1,12 +1,10 @@
 import { Chip } from "@heroui/chip";
+import { IUser } from "@/types/user";
 
-interface MainProfileHeaderProps {
-  openToWork: boolean;
-  headLine: string;
-  firstName: string;
-  lastName: string;
-  username: string;
-}
+type MainProfileHeaderProps = Pick<
+  IUser,
+  "openToWork" | "headLine" | "firstName" | "lastName" | "username"
+>;
 
 export const MainProfileHeader = ({
   openToWork,
@@ -16,7 +14,7 @@ export const MainProfileHeader = ({
   username,
 }: MainProfileHeaderProps) => {
   return (
-    <header className=" flex gap-2 flex-col items-center">
+    <header className="flex gap-2 flex-col items-center">
       <Chip variant="faded" color={openToWork ? "success" : "warning"}>
         {openToWork ? "آزاد برای کار" : "درحال کار"}
       </Chip>
@@ -24,7 +22,7 @@ export const MainProfileHeader = ({
       <h2 className="sm:text-6xl text-3xl font-bold">
         {firstName} {lastName}
       </h2>
-      <span>{username}@</span>
+      <Chip>{username} @</Chip>
     </header>
   );
 };
