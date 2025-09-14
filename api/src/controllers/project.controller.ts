@@ -3,6 +3,7 @@ import { ProjectModel } from '../models/Project';
 import { projectValidator } from '../validators/project';
 import { UserModel } from '../models/User';
 import mongoose from 'mongoose';
+import { getAuth } from '@clerk/express';
 
 //? getting proejcts
 export const getProjects = async (req: Request, res: Response) => {
@@ -78,7 +79,7 @@ export const getProjects = async (req: Request, res: Response) => {
 
 export const create = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
 
     const user = await UserModel.findOne({ clerkId: userId });
     if (!user) {
@@ -158,7 +159,7 @@ function setNested(obj: any, path: string, value: any) {
 
 export const updateProject = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
 
     const { id } = req.params;
     const { field, value, updates, op } = req.body;
@@ -293,7 +294,7 @@ export const updateProject = async (req: Request, res: Response) => {
 //? uploads
 export const uploadCoverImage = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
 
     const { id } = req.params;
     if (!req.file)
@@ -326,7 +327,7 @@ export const uploadCoverImage = async (req: Request, res: Response) => {
 
 export const uploadImages = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
 
     const { id } = req.params;
     if (!req.files || !(req.files as Express.Multer.File[]).length)
@@ -362,7 +363,7 @@ export const uploadImages = async (req: Request, res: Response) => {
 
 export const deleteProject = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const user = await UserModel.findOne({ clerkId: userId });
     if (!user)
       return res.status(404).json({ ok: false, error: 'User not found' });

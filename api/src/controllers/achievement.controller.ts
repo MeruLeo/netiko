@@ -3,10 +3,11 @@ import { AchievementModel } from '../models/Achievement';
 import { achievementValidator } from '../validators/achievement';
 import { UserModel } from '../models/User';
 import mongoose from 'mongoose';
+import { getAuth } from '@clerk/express';
 
 export const createAchievement = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const user = await UserModel.findOne({ clerkId: userId });
 
     if (!user) {
@@ -121,7 +122,7 @@ function setNested(obj: any, path: string, value: any) {
 
 export const updateAchievement = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const { id } = req.params;
     const { field, value, updates } = req.body;
 
@@ -213,7 +214,7 @@ export const updateAchievement = async (req: Request, res: Response) => {
 
 export const deleteAchievement = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const user = await UserModel.findOne({ clerkId: userId });
     if (!user)
       return res.status(404).json({ ok: false, error: 'User not found' });

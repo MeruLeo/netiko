@@ -3,10 +3,11 @@ import { WorkExpModel } from '../models/WorkExp';
 import { workExpValidator } from '../validators/workExp';
 import { UserModel } from '../models/User';
 import mongoose from 'mongoose';
+import { getAuth } from '@clerk/express';
 
 export const createWorkExp = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
 
     const user = await UserModel.findOne({ clerkId: userId });
     if (!user) {
@@ -135,7 +136,7 @@ function setNested(obj: any, path: string, value: any) {
 
 export const updateWorkExp = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const { id } = req.params;
     const { field, value, updates, op } = req.body;
 
@@ -268,7 +269,7 @@ export const updateWorkExp = async (req: Request, res: Response) => {
 
 export const deleteWorkExp = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const user = await UserModel.findOne({ clerkId: userId });
     if (!user)
       return res.status(404).json({ ok: false, error: 'User not found' });
