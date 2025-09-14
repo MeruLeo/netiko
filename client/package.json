@@ -11,6 +11,7 @@
   "dependencies": {
     "@clerk/localizations": "^3.24.0",
     "@clerk/nextjs": "^6.31.6",
+    "@headlessui/react": "^2.2.8",
     "@heroui/avatar": "^2.2.21",
     "@heroui/button": "2.2.24",
     "@heroui/chip": "^2.2.21",
@@ -28,6 +29,7 @@
     "@heroui/theme": "2.4.20",
     "@react-aria/ssr": "3.9.10",
     "@react-aria/visually-hidden": "3.8.26",
+    "@types/react-avatar-editor": "^13.0.4",
     "axios": "^1.11.0",
     "clsx": "2.1.1",
     "dotenv": "^17.2.1",
@@ -38,6 +40,7 @@
     "next": "15.5.2",
     "next-themes": "0.4.6",
     "react": "18.3.1",
+    "react-avatar-editor": "^13.0.2",
     "react-dom": "18.3.1",
     "tailwind-merge": "^3.3.1",
     "zustand": "^5.0.8"

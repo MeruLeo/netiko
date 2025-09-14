@@ -23,7 +23,7 @@ export default function ClientProfile() {
 
   return (
     <>
-      {localUser.bio === "" ? (
+      {/* {localUser.bio === "" ? (
         <div className="fixed flex flex-col items-center justify-center gap-4 z-[9999] m-4 p-4 rounded-3xl bg-gray4 bottom-0 ring-0">
           <p>هنوز کلی کار مونده که نکردی، شروع کن !</p>
           <Button
@@ -36,7 +36,7 @@ export default function ClientProfile() {
             بزن بریم
           </Button>
         </div>
-      ) : null}
+      ) : null} */}
 
       <section className="mb-[7rem] flex flex-col justify-center items-center gap-4">
         {localUser.bio === "" ? <div></div> : null}

@@ -84,6 +84,15 @@ export interface IUser {
     achievements?: number;
   };
 
+  isExists?: {
+    about?: boolean;
+    projects?: boolean;
+    contact?: boolean;
+    workExps?: boolean;
+    educations?: boolean;
+    achievements?: boolean;
+  };
+
   pinnedProjectIds?: string[];
 
   createdAt: Date;

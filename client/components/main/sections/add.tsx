@@ -18,7 +18,7 @@ export const AddSection = () => {
     <>
       <Button
         onPress={onOpen}
-        className="flex flex-col w-[10rem] h-[8rem] text-2xl rounded-4xl"
+        className="flex bg-gray4 border-2 border-gray3 flex-col w-[10rem] h-[8rem] text-2xl rounded-4xl"
       >
         <Plus />
         <span>بخش جدید</span>

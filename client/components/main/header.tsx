@@ -19,10 +19,12 @@ export const MainProfileHeader = ({
         {openToWork ? "آزاد برای کار" : "درحال کار"}
       </Chip>
       <p>{headLine}</p>
-      <h2 className="sm:text-6xl text-3xl font-bold">
+      <h1 className="sm:text-6xl text-3xl font-bold">
         {firstName} {lastName}
-      </h2>
-      <Chip className="mt-4">{username} @</Chip>
+      </h1>
+      <Chip className="mt-4 bg-gradient-to-r from-indigo via-blue to-green border border-gray3">
+        {username} @
+      </Chip>
     </header>
   );
 };

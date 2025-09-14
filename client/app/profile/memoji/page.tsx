@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import { title } from "@/components/primitives";
 import { Button } from "@heroui/button";
 import { useProfileStore } from "@/stores/profile";
-import { useUser } from "@clerk/nextjs"; // Clerk hook برای گرفتن یوزر
-import { IUser } from "@/types/user";
+import { useUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 const memojis = [
@@ -34,7 +33,6 @@ export default function ProfilePage() {
   const handleConfirm = async () => {
     if (!selected) return;
     await setMemoji(selected);
-    console.log("✅ میموجی جدید ذخیره شد:", selected);
     redirect("/");
   };
 
