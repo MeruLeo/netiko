@@ -8,7 +8,6 @@ import {
   uploadAvatar,
 } from '../controllers/profile.controller';
 import { requireAuth } from '@clerk/express';
-import { upload } from '../utils/multer';
 import { uploadTo } from '../middlewares/uploadTo';
 
 const router = Router();

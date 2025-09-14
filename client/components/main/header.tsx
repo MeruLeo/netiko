@@ -22,7 +22,7 @@ export const MainProfileHeader = ({
       <h2 className="sm:text-6xl text-3xl font-bold">
         {firstName} {lastName}
       </h2>
-      <Chip>{username} @</Chip>
+      <Chip className="mt-4">{username} @</Chip>
     </header>
   );
 };

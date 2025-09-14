@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserModel } from '../models/User';
+import { getAuth } from '@clerk/express';
 
 const FIELD_MAP: Record<string, string> = {
   bio: 'bio',
@@ -38,7 +39,7 @@ function setNested(obj: any, path: string, value: any) {
 
 export const updateProfile = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
 
     const { field, value, updates } = req.body;
 
@@ -106,7 +107,7 @@ export const updateProfile = async (req: Request, res: Response) => {
 
 export const uploadAvatar = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     if (!req.file) {
       return res.status(400).json({ ok: false, error: 'No file uploaded' });
     }
@@ -126,7 +127,7 @@ export const uploadAvatar = async (req: Request, res: Response) => {
 
 export const deleteAvatar = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
 
     const updatedUser = await UserModel.findOneAndUpdate(
       { clerkId: userId },
@@ -143,19 +144,28 @@ export const deleteAvatar = async (req: Request, res: Response) => {
 
 export const setMemoji = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const { memoji } = req.body;
 
-    if (!memoji)
+    if (!userId) {
+      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+    }
+
+    if (!memoji) {
       return res.status(400).json({ ok: false, error: 'Memoji required' });
+    }
 
     const updatedUser = await UserModel.findOneAndUpdate(
       { clerkId: userId },
-      { $set: { memoji } },
+      { $set: { memoji, updatedAt: new Date() } },
       { new: true },
     );
 
-    return res.json({ ok: true, memoji: updatedUser?.memoji });
+    if (!updatedUser) {
+      return res.status(404).json({ ok: false, error: 'User not found' });
+    }
+
+    return res.json({ ok: true, memoji: updatedUser.memoji });
   } catch (err) {
     console.error('setMemoji error:', err);
     res.status(500).json({ ok: false, error: 'Internal server error' });
@@ -164,7 +174,7 @@ export const setMemoji = async (req: Request, res: Response) => {
 
 export const addSkill = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const skill = req.body;
 
     const updatedUser = await UserModel.findOneAndUpdate(
@@ -182,7 +192,7 @@ export const addSkill = async (req: Request, res: Response) => {
 
 export const removeSkill = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).auth().userId;
+    const { userId } = getAuth(req);
     const { skillId } = req.params;
 
     const updatedUser = await UserModel.findOneAndUpdate(

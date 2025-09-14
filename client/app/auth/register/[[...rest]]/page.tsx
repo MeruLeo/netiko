@@ -1,8 +1,8 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 
-export default function AuthLoginPage() {
+export default function AuthRegisterPage() {
   return (
-    <SignIn
+    <SignUp
       appearance={{
         elements: {
           card: "bg-gray4 rounded-none",
@@ -20,6 +20,12 @@ export default function AuthLoginPage() {
           footerAction: "bg-gray4 w-full flex justify-center items-center",
           footerActionText: "text-foreground",
           footerActionLink: "text-link",
+          formFieldSuccessText: "text-green",
+          otpCodeFieldInput: "text-foreground focus:outline-foreground",
+          otpCodeFieldInputs: "ltr-input",
+          formResendCodeLink: "text-link",
+          identityPreviewText: "text-gray",
+          identityPreviewEditButton: "text-gray",
         },
       }}
     />

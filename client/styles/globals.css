@@ -34,3 +34,8 @@
   --color-gray4: #1c1c1e;
   --color-link: #0b84ff;
 }
+
+.ltr-input {
+  direction: ltr;
+  text-align: left;
+}

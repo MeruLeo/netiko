@@ -15,22 +15,7 @@ export const MainProfileMain = ({ memoji, avatar }: MainProfileMainProps) => {
   return (
     <main className="flex flex-col items-center">
       <section>
-        {avatar ? (
-          <Image
-            alt="avatar"
-            className="rounded-full my-10 object-cover object-center"
-            src={avatar}
-            width={100}
-            height={100}
-          />
-        ) : (
-          <Image
-            alt="memoji"
-            src={`/imgs/memojis/male/6.png`}
-            width={200}
-            height={200}
-          />
-        )}
+        <Image alt="memoji" src={`${memoji}`} width={200} height={200} />
       </section>
       <section className="">
         <AddSection />

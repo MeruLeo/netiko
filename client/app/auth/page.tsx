@@ -3,10 +3,14 @@ import { Ripple } from "@/components/ui/ripple";
 import { SignIn, SignInButton, SignUp, SignUpButton } from "@clerk/nextjs";
 import { Button } from "@heroui/button";
 import { LogIn, UserPlus } from "lucide-react";
+import Head from "next/head";
 
 export default function AuthPage() {
   return (
     <div className="flex flex-col gap-4">
+      <Head>
+        <title>نتیکو | شروع</title>
+      </Head>
       <header>
         <Ripple />
       </header>
@@ -21,7 +25,9 @@ export default function AuthPage() {
           <p>ارتباط برقرار کنید، به نمایش بذارید، رشد کنید</p>
         </div>
         <div className="flex gap-2 round flex-col mt-4">
-          <Button className="bg-blue">داستان خود را شروع کنید</Button>
+          <Button className="bg-blue" as={"a"} href="/auth/register">
+            داستان خود را شروع کنید
+          </Button>
           <Button className="bg-gray3" as={"a"} href="/auth/login">
             وارد شوید
           </Button>

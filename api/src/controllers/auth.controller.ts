@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { clerkClient, getAuth } from '@clerk/express';
+import { clerkClient, getAuth, WebhookEvent } from '@clerk/express';
 import { UserModel } from '../models/User';
 import { IUser } from '../types/user';
 
@@ -73,16 +73,56 @@ export const me = async (req: Request, res: Response) => {
 };
 
 export const webhookClerk = async (req: Request, res: Response) => {
-  const evt = req.body;
-  if (evt.type === 'user.created') {
-    const u = evt.data;
-    await UserModel.create({
-      clerkId: u.id,
-      email: u.emailAddresses?.[0]?.emailAddress,
-      firstName: u.firstName,
-      lastName: u.lastName,
-      username: u.id,
-    });
+  try {
+    const evt: WebhookEvent = req.body;
+
+    switch (evt.type) {
+      case 'user.created': {
+        const u = evt.data;
+        await UserModel.create({
+          clerkId: u.id,
+          username: u.username ?? u.id,
+          email: u.email_addresses?.[0]?.email_address,
+          firstName: u.first_name,
+          lastName: u.last_name,
+          avatar: u.image_url ?? '',
+          role: 'user',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+        break;
+      }
+
+      case 'user.updated': {
+        const u = evt.data;
+        await UserModel.findOneAndUpdate(
+          { clerkId: u.id },
+          {
+            username: u.username ?? u.id,
+            email: u.email_addresses?.[0]?.email_address,
+            firstName: u.first_name,
+            lastName: u.last_name,
+            avatar: u.image_url ?? '',
+            updatedAt: new Date(),
+          },
+          { new: true },
+        );
+        break;
+      }
+
+      case 'user.deleted': {
+        const u = evt.data;
+        await UserModel.findOneAndDelete({ clerkId: u.id });
+        break;
+      }
+
+      default:
+        console.log(`Unhandled Clerk webhook event: ${evt.type}`);
+    }
+
+    res.sendStatus(200);
+  } catch (err: any) {
+    console.error('Error in Clerk webhook:', err);
+    res.status(500).json({ ok: false, error: 'Internal server error' });
   }
-  res.sendStatus(200);
 };
