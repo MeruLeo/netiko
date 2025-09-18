@@ -17,7 +17,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   fetchUser: async () => {
     try {
       const res = await api.get("/auth/me");
-      console.log(res.data.user);
       set({ user: res.data.user, isAuthenticated: true });
     } catch (err) {
       console.error("خطا در دریافت اطلاعات کاربر:", err);

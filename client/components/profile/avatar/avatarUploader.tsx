@@ -1,16 +1,26 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useProfileStore } from "@/stores/profile";
+import { useAuthStore } from "@/stores/auth";
 import AvatarEditor from "react-avatar-editor";
 import { Dialog } from "@headlessui/react";
 import { Button } from "@heroui/button";
+import Image from "next/image";
+import { Input } from "@heroui/input";
+
 export default function AvatarUploader() {
+  const { fetchUser } = useAuthStore();
   const { user, uploadAvatar, deleteAvatar } = useProfileStore();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const editorRef = useRef<AvatarEditor>(null);
   const [scale, setScale] = useState(1.2);
+
+  useEffect(() => {
+    fetchUser();
+    console.log(user);
+  }, [fetchUser]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -33,17 +43,16 @@ export default function AvatarUploader() {
 
   return (
     <div className="flex flex-col items-center space-y-3">
-      {/* دایره آواتار */}
       <label className="relative w-32 h-32 rounded-full overflow-hidden cursor-pointer border-2 border-gray-600 hover:border-blue-500 transition">
-        <input
+        <Input
           type="file"
           accept="image/*"
           className="hidden"
           onChange={handleFileChange}
         />
         {user?.avatar ? (
-          <img
-            src={user.avatar}
+          <Image
+            src={`http://localhost:5000/${user.avatar}`}
             alt="Avatar"
             className="w-full h-full object-cover"
           />
@@ -54,14 +63,12 @@ export default function AvatarUploader() {
         )}
       </label>
 
-      {/* دکمه حذف آواتار */}
       {user?.avatar && (
         <Button variant="faded" onPress={deleteAvatar}>
           حذف آواتار
         </Button>
       )}
 
-      {/* دیالوگ ویرایش */}
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -94,7 +101,7 @@ export default function AvatarUploader() {
               <Button variant="bordered" onPress={() => setIsOpen(false)}>
                 لغو
               </Button>
-              <Button onClick={handleSave}>تایید</Button>
+              <Button onPress={handleSave}>تایید</Button>
             </div>
           </div>
         </div>

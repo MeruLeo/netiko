@@ -18,7 +18,7 @@ router.patch('/', requireAuth(), updateProfile);
 router.post(
   '/avatar',
   requireAuth(),
-  uploadTo('avatar').single('avatar'),
+  uploadTo('avatars').single('avatar'),
   uploadAvatar,
 );
 router.delete('/avatar', requireAuth(), deleteAvatar);
