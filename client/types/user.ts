@@ -98,3 +98,9 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IUserResponse extends Omit<IUser, "createdAt" | "updatedAt"> {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+}
