@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { clerkClient, getAuth, WebhookEvent } from '@clerk/express';
 import { UserModel } from '../models/User';
-import { IUser } from '../types/user';
 
 export const me = async (req: Request, res: Response) => {
   try {

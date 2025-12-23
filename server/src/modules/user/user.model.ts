@@ -64,13 +64,14 @@ export interface IUserDocument extends Omit<IUser, '_id'>, Document {
 const UserSchema = new Schema<IUserDocument>(
   {
     clerkId: { type: String, required: true, unique: true, index: true },
-    username: { type: String, required: true, unique: true, trim: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
-    password: { type: String, required: true },
+
+    username: { type: String, trim: true },
+    email: { type: String, lowercase: true },
+
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
 
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: String,
+    lastName: String,
 
     bio: String,
     headLine: String,
@@ -80,6 +81,7 @@ const UserSchema = new Schema<IUserDocument>(
     languages: [LanguageSchema],
     skills: [SkillSchema],
     socialMedia: [SocialMediaSchema],
+
     militaryService: {
       type: String,
       enum: ['eligible', 'exemptPermanent', 'exemptTemporary', 'completed', 'inService', 'absent', 'caregiver', 'reserve'],
@@ -97,15 +99,16 @@ const UserSchema = new Schema<IUserDocument>(
       enum: ['active', 'suspended', 'banned'],
       default: 'active',
     },
+
     openToWork: Boolean,
     isVerified: { type: Boolean, default: false },
     marriage: Boolean,
 
     counts: {
-      projects: Number,
-      workExps: Number,
-      educations: Number,
-      achievements: Number,
+      projects: { type: Number, default: 0 },
+      workExps: { type: Number, default: 0 },
+      educations: { type: Number, default: 0 },
+      achievements: { type: Number, default: 0 },
     },
 
     pinnedProjectIds: [{ type: String }],

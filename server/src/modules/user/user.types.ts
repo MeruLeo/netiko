@@ -43,16 +43,19 @@ export type MilitaryService =
 
 export interface IUser {
   clerkId: string;
-  username: string;
-  email: string;
-  password: string;
+
+  username?: string;
+  email?: string;
+
   role: 'user' | 'admin';
-  firstName: string;
-  lastName: string;
+
+  firstName?: string;
+  lastName?: string;
 
   bio?: string;
   headLine?: string;
   birthday?: Date;
+
   contact?: ContactInfo;
   languages?: Language[];
   skills?: Skill[];
@@ -80,8 +83,8 @@ export interface IUser {
 
   pinnedProjectIds?: string[];
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 //Filters
