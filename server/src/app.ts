@@ -10,6 +10,7 @@ import { AppError, errorHandler } from '#src/middlewares/error-handler.js';
 import healthcheckRoutes from '#src/modules/healthcheck/healthcheck.route.js';
 import userRoutes from '#src/modules/user/user.route.js';
 import authRoutes from '#src/modules/auth/auth.route.js';
+import profileRoutes from '#src/modules/profile/profile.route.js';
 import { successHandler } from './middlewares/success-handler.js';
 import { clerkMiddleware } from '@clerk/express';
 
@@ -37,6 +38,7 @@ export const createApp = (): Express => {
   app.use(successHandler);
   app.use('/api', healthcheckRoutes);
   app.use('/api/v1/auth', authRoutes);
+  app.use('/api/v1/profile', profileRoutes);
   app.use('/api/v1/users', userRoutes);
 
   app.use((_req, _res, next) => {

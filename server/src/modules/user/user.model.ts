@@ -14,7 +14,7 @@ const SkillSchema = new Schema<Skill>(
     years: { type: Number },
     lastUsed: { type: Date },
     category: { type: String },
-    skillId: { type: String },
+    skillId: { type: String, required: true },
   },
   { _id: false },
 );
