@@ -1,7 +1,5 @@
-import { Request, Response } from 'express';
-import { clerkClient, getAuth, WebhookEvent } from '@clerk/express';
+import { clerkClient, WebhookEvent } from '@clerk/express';
 import { UserModel } from '../user/user.model.js';
-import { AppError } from '#src/middlewares/error-handler.js';
 import { logger } from '#src/middlewares/logger.js';
 
 export const authService = {
@@ -90,32 +88,6 @@ export const authService = {
 
       default:
         logger.info(`Unhandled Clerk webhook event: ${evt.type}`);
-    }
-  },
-};
-
-export const authController = {
-  me: async (req: Request, res: Response) => {
-    try {
-      const { userId } = getAuth(req);
-      if (!userId) throw new AppError('Unauthorized', 401);
-
-      const user = await authService.getOrCreateMe(userId);
-      return res.success(user);
-    } catch (err: any) {
-      logger.error('Error in /me:', err);
-      return res.status(err.statusCode || 500).json({ ok: false, error: err.message || 'Internal server error' });
-    }
-  },
-
-  webhookClerk: async (req: Request, res: Response) => {
-    try {
-      const evt: WebhookEvent = req.body;
-      await authService.handleClerkWebhook(evt);
-      return res.sendStatus(200);
-    } catch (err: any) {
-      logger.error('Error in Clerk webhook:', err);
-      return res.status(err.statusCode || 500).json({ ok: false, error: err.message || 'Internal server error' });
     }
   },
 };
