@@ -4,7 +4,7 @@ import fs from 'fs';
 import type { Request } from 'express';
 import { AppError } from './error-handler.js';
 
-export type UploadFolder = 'projects' | 'avatars';
+export type UploadFolder = 'projects-cover' | 'projects-images' | 'avatars';
 
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 
@@ -24,8 +24,24 @@ function generateFileName(fieldname: string, originalName: string): string {
 
 function createDiskStorage(folder: UploadFolder) {
   return multer.diskStorage({
-    destination: (_req, _file, cb) => {
-      const uploadPath = path.join(BASE_UPLOAD_PATH, folder);
+    destination: (req, _file, cb) => {
+      let uploadPath = BASE_UPLOAD_PATH;
+
+      if (folder.startsWith('projects')) {
+        const projectId = req.params.id;
+        if (!projectId) {
+          return cb(new AppError('Project id is required', 400), '');
+        }
+
+        const subFolder = folder === 'projects-cover' ? 'cover' : 'images';
+
+        uploadPath = path.join(uploadPath, 'projects', projectId, subFolder);
+      }
+
+      if (folder === 'avatars') {
+        uploadPath = path.join(uploadPath, 'avatars');
+      }
+
       ensureDirectoryExists(uploadPath);
       cb(null, uploadPath);
     },
