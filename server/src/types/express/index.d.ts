@@ -13,6 +13,7 @@ declare global {
       user?: userModel;
       file?: Multer.File;
       files?: Multer.File[];
+      validated?: any;
     }
   }
 }
